@@ -1,3 +1,4 @@
+//object data
 function Detail() {
   return (
     <div className="container">
