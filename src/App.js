@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { createContext, useState } from "react";
 import "./App.css";
 import { Navbar, Container, Nav } from "react-bootstrap";
 // import imgUrl from "./img/bg-1.png"; style={{ backgroundImage: "url(" + imgUrl + ")" }}
 import data from "./data.js";
 import Detail from "./routes/Detail.js";
+import Cart from "./routes/Cart.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import axios from "axios";
+
+export let ConText1 = createContext();
 
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+  let [stock] = useState([10, 11, 12]);
 
   return (
     <div className="App">
@@ -86,7 +90,17 @@ function App() {
             </>
           }
         />
-        <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
+        <Route
+          path="/detail/:id"
+          element={
+            <ConText1.Provider value={{ stock }}>
+              <Detail shoes={shoes} />
+            </ConText1.Provider>
+          }
+        />
+
+        <Route path="/cart" element={<Cart />} />
+
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>} />
           <Route path="location" element={<div>location</div>} />

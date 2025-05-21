@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
+//import styled from "styled-components";
 import { Nav } from "react-bootstrap";
+import { ConText1 } from "./../App.js";
+import { addItem } from "./../store.js";
+import { useDispatch } from "react-redux";
+import { Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //스타일로 컴포넌트 생성
 // let YellowBtn = styled.button`
@@ -26,6 +31,12 @@ function Detail(props) {
     return x.id == id;
   });
   let [tab, setTab] = useState(0);
+  let [fade2, setFade2] = useState("");
+
+  let { stock } = useContext(ConText1);
+
+  let dispatch = useDispatch(); //함수 실행 요청
+  let navigate = useNavigate();
 
   useEffect(() => {
     //Detail 컴포넌트가 mount, update될 때 실행
@@ -36,6 +47,7 @@ function Detail(props) {
     let timer = setTimeout(() => {
       //setDisplay("none");
       setDisplay(false);
+      //setFade2("end");
     }, 2000);
 
     if (isNaN(display2)) {
@@ -47,6 +59,7 @@ function Detail(props) {
 
       //clean up function 작성 많이 함
       //clean up function은 mount시 실행안됨, unmount시 실행됨
+      //setFade2("");
       clearTimeout(timer);
     };
   }, [display2]);
@@ -54,7 +67,8 @@ function Detail(props) {
   // [...] dependency가 있을 경우 그 state가 변경될때마다 코드 실행
 
   return (
-    <div className="container">
+    <div className={"container" + fade2}>
+      {/* start */}
       {display == true ? (
         <div
           className="alert alert-warning"
@@ -97,10 +111,29 @@ function Detail(props) {
           <h4 className="pt-5">{data.title}</h4>
           <p>{data.content}</p>
           <p>{data.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              dispatch(
+                addItem({
+                  id: 3,
+                  name: data.title,
+                  count: 0,
+                })
+              );
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
-
+      <button
+        onClick={() => {
+          navigate("/cart");
+        }}
+      >
+        장바구니
+      </button>
       <Nav variant="tabs" defaultActiveKey="link0">
         <Nav.Item>
           <Nav.Link
@@ -139,6 +172,20 @@ function Detail(props) {
 }
 
 function TabContent({ tab }) {
+  let [fade, setFade] = useState("");
+  let { stock } = useContext(ConText1);
+
+  useEffect(() => {
+    let a = setTimeout(() => {
+      setFade("end");
+    }, 100);
+
+    return () => {
+      clearTimeout(a);
+      setFade("");
+    };
+  }, [tab]);
+
   // props 없이 사용 가능
   // if (tab == 0) {
   //   return <div>내용0</div>;
@@ -147,8 +194,12 @@ function TabContent({ tab }) {
   // } else {
   //   return <div>내용2</div>;
   // }
-  let array = [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>];
-  return array[tab];
+  return (
+    <div className={"start " + fade}>
+      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab]}
+      {stock}
+    </div>
+  );
 }
 
 export default Detail;
