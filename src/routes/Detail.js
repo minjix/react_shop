@@ -5,7 +5,6 @@ import { Nav } from "react-bootstrap";
 import { ConText1 } from "./../App.js";
 import { addItem } from "./../store.js";
 import { useDispatch } from "react-redux";
-import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 //스타일로 컴포넌트 생성
@@ -38,31 +37,42 @@ function Detail(props) {
   let dispatch = useDispatch(); //함수 실행 요청
   let navigate = useNavigate();
 
+  // watched.add(data.id);
+  // let set = new Set(watched);
+  // localStorage.setItem("watched", JSON.stringify(set));
+
   useEffect(() => {
     //Detail 컴포넌트가 mount, update될 때 실행
     //html rendering 이 다 끝난 후 실행됨
     // for (var i = 0; i < 10000; i++) {
     //   console.log(1);
     // }
-    let timer = setTimeout(() => {
-      //setDisplay("none");
-      setDisplay(false);
-      //setFade2("end");
-    }, 2000);
 
-    if (isNaN(display2)) {
-      alert("숫자만 입력 가능합니다.");
-    }
+    let watched = localStorage.getItem("watched");
+    watched = JSON.parse(watched);
+    watched.push(data.id);
+    watched = new Set(watched);
+    localStorage.setItem("watched", JSON.stringify(watched));
 
-    return () => {
-      //useEffect가 동작 전에 실행
+    //let timer = setTimeout(() => {
+    //setDisplay("none");
+    //setDisplay(false);
+    //setFade2("end");
+    //}, 2000);
 
-      //clean up function 작성 많이 함
-      //clean up function은 mount시 실행안됨, unmount시 실행됨
-      //setFade2("");
-      clearTimeout(timer);
-    };
-  }, [display2]);
+    //if (isNaN(display2)) {
+    //alert("숫자만 입력 가능합니다.");
+    //}
+
+    //return () => {
+    //useEffect가 동작 전에 실행
+
+    //clean up function 작성 많이 함
+    //clean up function은 mount시 실행안됨, unmount시 실행됨
+    //setFade2("");
+    //clearTimeout(timer);
+    //};
+  }, []);
   // [] 만 할경우 mount 됐을 경우에만 코드 실행
   // [...] dependency가 있을 경우 그 state가 변경될때마다 코드 실행
 

@@ -2,8 +2,12 @@ import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { changeAge } from "./../store/userSlice.js";
 import { increaseCnt } from "./../store.js";
-import { useEffect } from "react";
-import { Route } from "react-router-dom";
+import { useEffect, useState, memo } from "react";
+
+// let Child = memo(function () {
+//   console.log("재랜더링");
+//   return <div>자식 컴포넌트</div>;
+// });
 
 function Cart() {
   let state = useSelector((state) => {
@@ -17,8 +21,18 @@ function Cart() {
 
   let dispatch = useDispatch(); //함수 실행 요청
 
+  let [count, setCount] = useState(0);
+
   return (
     <div>
+      {/* <Child count={count} /> */}
+      {/* <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        +
+      </button> */}
       <h6>
         {state.user.name} {state.user.age}의 장바구니
       </h6>
