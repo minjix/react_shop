@@ -6,6 +6,7 @@ import { ConText1 } from "./../App.js";
 import { addItem } from "./../store.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useLike, useGetName } from "./../hooks/like.js";
 
 //스타일로 컴포넌트 생성
 // let YellowBtn = styled.button`
@@ -21,6 +22,9 @@ import { useNavigate } from "react-router-dom";
 
 //object data
 function Detail(props) {
+  let [like, addLike] = useLike();
+  let name = useGetName();
+
   //let [display, setDisplay] = useState("block");
   let [display, setDisplay] = useState(true);
   let [display2, setDisplay2] = useState("");
@@ -47,26 +51,21 @@ function Detail(props) {
     // for (var i = 0; i < 10000; i++) {
     //   console.log(1);
     // }
-
-    let watched = localStorage.getItem("watched");
-    watched = JSON.parse(watched);
-    watched.push(data.id);
-    watched = new Set(watched);
-    localStorage.setItem("watched", JSON.stringify(watched));
-
+    // let watched = localStorage.getItem("watched");
+    // watched = JSON.parse(watched);
+    // watched.push(data.id);
+    // watched = new Set(watched);
+    // localStorage.setItem("watched", JSON.stringify(watched));
     //let timer = setTimeout(() => {
     //setDisplay("none");
     //setDisplay(false);
     //setFade2("end");
     //}, 2000);
-
     //if (isNaN(display2)) {
     //alert("숫자만 입력 가능합니다.");
     //}
-
     //return () => {
     //useEffect가 동작 전에 실행
-
     //clean up function 작성 많이 함
     //clean up function은 mount시 실행안됨, unmount시 실행됨
     //setFade2("");
@@ -78,6 +77,8 @@ function Detail(props) {
 
   return (
     <div className={"container" + fade2}>
+      {name}
+
       {/* start */}
       {display == true ? (
         <div
@@ -118,6 +119,15 @@ function Detail(props) {
           }}
         />
         <div className="col-md-6">
+          <h4>{like}</h4>
+          <span
+            onClick={() => {
+              addLike();
+            }}
+          >
+            ❤
+          </span>
+
           <h4 className="pt-5">{data.title}</h4>
           <p>{data.content}</p>
           <p>{data.price}원</p>
